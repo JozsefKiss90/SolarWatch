@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "ENbM37YusdO/Unt0Ag51Pdov8shRF11pSoxRpUjcNHNAHJH1BHI9lR4BH3f8bygMDXahIU3HKM6XxPg4BnEW5w==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\jozsi\\RiderProjects\\solarwatch-api-1-csharp-JozsefKiss90\\SolarWatch\\SolarWatch\\SolarWatch.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\jozsi\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.11\\microsoft.aspnetcore.openapi.7.0.11.nupkg.sha512",
+    "C:\\Users\\jozsi\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\jozsi\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
+    "C:\\Users\\jozsi\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "C:\\Users\\jozsi\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "C:\\Users\\jozsi\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "C:\\Users\\jozsi\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
