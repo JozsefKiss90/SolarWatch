@@ -20,7 +20,7 @@ public class SolarWatchApi : ISolarWatchProvider
         var dateString = date.ToString("yyyy-MM-dd");
         var url = $"https://api.sunrise-sunset.org/json?lat={lat}&lon={lon}&date={dateString}";
 
-        try
+        try 
         {
             _logger.LogInformation("Calling SolarWatch API with url: {url}", url);
             string jsonResponse = await _client.GetStringAsync(url);  
