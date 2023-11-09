@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using SolarWatch.Database;
+using SolarWatch.Repository;
 using SolarWatch.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<ISolarWatchProvider, SolarWatchApi>();
 builder.Services.AddHttpClient<IGeoCoderProvider, GeoCoderApi>();
 builder.Services.AddSingleton<IJsonProcessor, JsonProcessor>();
+builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddDbContext<SolarApiContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SolarApi")));
 
 var app = builder.Build();
 
@@ -26,5 +32,22 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+void InitializeDb(IApplicationBuilder app)
+{
+    using var scope = app.ApplicationServices.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
+    PrintCities();
+    
+    void PrintCities()
+    {
+        foreach (var city in db.Cities)
+        {
+            Console.WriteLine($"{city.Id}, {city.Name}, {city.Country}, {city.Latitude}, {city.Longitude}");
+        }
+    }
+}
+
+InitializeDb(app);
 
 app.Run();
