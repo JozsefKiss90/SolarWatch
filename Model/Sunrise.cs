@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class Sunrises
 {
     private TimeOnly _sunriseTime;
-
+    public DateOnly DateOfSunrise { get; set; }
     public int Id { get; init; }
 
     // This is the property you map to the database as a TimeSpan for storage

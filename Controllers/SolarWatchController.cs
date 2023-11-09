@@ -35,18 +35,19 @@ public class SolarWatchController : ControllerBase
         _cityRepository = cityRepository;
         _solarApiContext = solarApiContext;
     }
-
+ 
     [HttpGet("sunrise", Name = "GetSunrise")]
     public async Task<ActionResult<Sunrises>> GetSunrise([Required] string cityName, [Required] DateOnly date)
     {   
         var city = _cityRepository.GetByName(cityName);
+
         if (city == null)
         {
             return NotFound($"City {cityName} not found");
         }
         try
         {
-            if (city.SunriseId == null)
+            if (city.SunriseId == null || (city.Sunrise != null && date != city.Sunrise.DateOfSunrise))
             {
                 string geoCoderApiResponse = await _geoCoderProvider.GetCityPropsAsync(cityName);
                 var geoData = _jsonProcessor.ProcessCity(geoCoderApiResponse);
@@ -54,13 +55,20 @@ public class SolarWatchController : ControllerBase
                 var solarData = _jsonProcessor.ProcessSolar(solarApiResponse);
                 string timeString = solarData.Sunrise;
                 TimeOnly sunriseTime = TimeOnly.ParseExact(timeString, "h:mm:ss tt", CultureInfo.InvariantCulture);
-                Sunrises sunrise = new Sunrises();
-                sunrise.SunriseTime = sunriseTime;
+                Sunrises sunrise = new Sunrises
+                {
+                    SunriseTime = sunriseTime, 
+                    DateOfSunrise = date
+                };
+
                 _solarApiContext.Sunrises.Add(sunrise);
                 _solarApiContext.SaveChanges();
-                city.SunriseId = sunrise.Id;
+
+                city.SunriseId = sunrise.Id; 
+                city.Sunrise = sunrise; 
+                _solarApiContext.Cities.Update(city); 
                 _solarApiContext.SaveChanges();
-                //update and return city sunrise
+
             }
       
             return Ok(city.Sunrise);  

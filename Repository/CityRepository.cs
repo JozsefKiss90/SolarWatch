@@ -1,4 +1,5 @@
-﻿using SolarWatch.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using SolarWatch.Database;
 using SolarWatch.Model;
 
 namespace SolarWatch.Repository;
@@ -19,8 +20,11 @@ public class CityRepository : ICityRepository
 
     public City? GetByName(string name)
     {
-        return _context.Cities.FirstOrDefault(c => c.Name == name);
+        return _context.Cities
+            .Include(c => c.Sunrise) // Eagerly load the Sunrise entity
+            .FirstOrDefault(c => c.Name == name);
     }
+
 
     public void Add(City city)
     {

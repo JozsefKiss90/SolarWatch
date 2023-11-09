@@ -1,4 +1,5 @@
-﻿using SolarWatch.Model;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using SolarWatch.Model;
 
 namespace SolarWatch.Database;
 
@@ -16,6 +17,16 @@ public class SolarApiContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        var dateOnlyConverter = new ValueConverter<DateOnly, DateTime>(
+            d => d.ToDateTime(new TimeOnly()), // Convert from DateOnly to DateTime
+            d => DateOnly.FromDateTime(d)); // Convert from DateTime to DateOnly
+
+        builder.Entity<Sunrises>(entity =>
+        {
+            entity.Property(e => e.DateOfSunrise)
+                .HasConversion(dateOnlyConverter);
+        });
+        
         builder.Entity<Sunrises>().Ignore(s => s.SunriseTime);
         builder.Entity<City>()
             .HasIndex(u => u.Name)

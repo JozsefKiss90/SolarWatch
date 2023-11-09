@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SolarWatch.Database;
+using SolarWatch.Model;
 using SolarWatch.Repository;
 using SolarWatch.Service;
 
@@ -36,12 +37,28 @@ app.MapControllers();
 void InitializeDb(IApplicationBuilder app)
 {
     using var scope = app.ApplicationServices.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<SolarApiContext>();
+    
+    // Ensure the database is created
+    dbContext.Database.Migrate();
+
     PrintCities();
     
     void PrintCities()
     {
-        foreach (var city in db.Cities)
+        if (!dbContext.Cities.Any())
+        {
+            // Seed the Cities table
+            dbContext.Cities.AddRange(new City[]
+            {
+                new City { Name = "London", Country = "England", Latitude = 51.509865, Longitude = -0.118092 },
+                new City { Name = "Budapest", Country = "Hungary", Latitude = 47.497913, Longitude = 19.040236 },
+                new City { Name = "Paris", Country = "France", Latitude = 48.864716, Longitude = 2.349014 }
+            });
+            dbContext.SaveChanges();
+        }
+
+        foreach (var city in dbContext.Cities)
         {
             Console.WriteLine($"{city.Id}, {city.Name}, {city.Country}, {city.Latitude}, {city.Longitude}");
         }
